@@ -1,0 +1,13 @@
+Region,Product,Revenue,Quantity
+East,Widget,1200,50
+East,Gadget,800,30
+West,Widget,1500,60
+West,Gadget,950,40
+North,Widget,900,35
+North,Gadget,1100,45
+South,Widget,1300,55
+South,Gadget,700,25
+East,Widget,1400,48
+West,Gadget,1050,42
+North,Widget,850,32
+South,Gadget,750,28

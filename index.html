@@ -3,10 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com;">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <title>CSV Pivot™</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGWB1025GD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MGWB1025GD');
+</script>
 <!-- Libraries: PapaParse 5.4.1, Chart.js 4.4.7 — Last checked: 2025-02-16. Periodically check for updates. -->
 <script>/* PapaParse 5.4.1 */
 /* @license
@@ -1121,21 +1129,36 @@ header p {
     <h3>Data Processing</h3>
     <p>All file uploads and data processing occur <strong>entirely within your web browser</strong>. Your data is never transmitted to, stored on, or accessible by any external server. No data leaves your device at any point during use.</p>
 
+    <h3>Analytics</h3>
+    <p>We use <strong>Google Analytics</strong>, a web analytics service provided by Google LLC, to help us understand how visitors use our site. Google Analytics collects information such as:</p>
+    <ul>
+      <li>Pages visited and time spent on each page</li>
+      <li>Referring website or source</li>
+      <li>General geographic location (city/country level)</li>
+      <li>Browser type, device type, and screen resolution</li>
+      <li>Anonymous usage statistics (e.g., button clicks, feature usage)</li>
+    </ul>
+    <p>Google Analytics uses cookies to collect this information. The data collected is aggregated and anonymous&mdash;it does not personally identify you. You can opt out of Google Analytics by installing the <a href="https://tools.google.com/dlpage/gaoptout" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.</p>
+    <p>For more information on how Google processes this data, please review <a href="https://policies.google.com/privacy" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google&rsquo;s Privacy Policy</a>.</p>
+
     <h3>Data We Do Not Collect</h3>
     <ul>
-      <li>We do not collect, store, or process any personal data.</li>
-      <li>We do not use cookies, tracking pixels, or analytics services.</li>
-      <li>We do not collect IP addresses, device identifiers, or usage telemetry.</li>
+      <li>We do not collect, store, or process any of the files or data you upload to the tool.</li>
+      <li>We do not use advertising networks or sell any data to third parties.</li>
+      <li>We do not collect names, email addresses, or other personally identifiable information.</li>
     </ul>
 
+    <h3>Cookies</h3>
+    <p>This site uses cookies solely for the purpose of Google Analytics. These cookies help us analyze site traffic and usage patterns. No cookies are used for advertising, personalization, or tracking across other websites.</p>
+
     <h3>Third-Party Services</h3>
-    <p>This application does not integrate with any third-party services, APIs, or advertising networks. All functionality is self-contained.</p>
+    <p>The only third-party service integrated with this application is Google Analytics for usage analytics. All core application functionality (file uploads, data processing, pivot tables, and visualizations) remains entirely client-side and self-contained. No uploaded data is ever transmitted to any external server.</p>
 
     <h3>GDPR &amp; International Privacy</h3>
-    <p>Because no personal data is collected or processed, the typical obligations under the General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and similar privacy regulations do not apply in practice. Nonetheless, we are committed to respecting all applicable privacy laws and the principles of data minimization and user control.</p>
+    <p>Google Analytics may collect anonymized usage data as described above. We have configured Google Analytics to anonymize IP addresses. Under the General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and similar privacy regulations, you have the right to opt out of analytics tracking using the opt-out link above. We are committed to respecting all applicable privacy laws and the principles of data minimization and user control.</p>
 
     <h3>Children&rsquo;s Privacy</h3>
-    <p>This tool does not knowingly collect any information from anyone, including children under the age of 13.</p>
+    <p>This tool does not knowingly collect personally identifiable information from anyone, including children under the age of 13. The anonymous analytics data collected by Google Analytics is not used to identify individual users.</p>
 
     <h3>Governing Law</h3>
     <p>This privacy policy shall be governed by and construed in accordance with the laws of the State of California, United States.</p>
@@ -1167,6 +1190,9 @@ header p {
       <li>Do not rely on this tool as the sole basis for business, financial, legal, or other critical decisions.</li>
     </ul>
 
+    <h3>Third-Party Services</h3>
+    <p>This application uses Google Analytics to collect anonymous usage data. While we take reasonable measures to ensure the integrity of this integration, we are not responsible for Google&rsquo;s data handling practices. Please refer to our Privacy Policy and <a href="https://policies.google.com/privacy" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google&rsquo;s Privacy Policy</a> for more information.</p>
+
     <h3>Limitation of Liability</h3>
     <p>To the fullest extent permitted by applicable law, Subtle Script Studio&trade; and its owners, employees, and affiliates shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your use of, or inability to use, this application or any outputs it produces.</p>
 
@@ -1191,7 +1217,7 @@ header p {
     <p>By accessing or using CSV Pivot&trade; (the &ldquo;Service&rdquo;), provided by Subtle Script Studio&trade; (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), you agree to be bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree to these Terms, do not use the Service.</p>
 
     <h3>2. Description of Service</h3>
-    <p>CSV Pivot&trade; is a free, client-side web application that allows users to upload data files, create pivot tables, and generate visualizations. All data processing occurs entirely within your web browser. No data is transmitted to or stored on any external server.</p>
+    <p>CSV Pivot&trade; is a free, client-side web application that allows users to upload data files, create pivot tables, and generate visualizations. All data processing occurs entirely within your web browser. No uploaded data is transmitted to or stored on any external server. The Service uses Google Analytics to collect anonymous usage statistics to help improve the Service; see our Privacy Policy for details.</p>
 
     <h3>3. Eligibility</h3>
     <p>You must be at least 13 years of age to use the Service. By using the Service, you represent that you meet this requirement.</p>
@@ -1209,7 +1235,7 @@ header p {
     <p>All content, design, code, and branding associated with CSV Pivot&trade; and Subtle Script Studio&trade; are the intellectual property of Subtle Script Studio&trade; and are protected by applicable intellectual property laws. You may not copy, modify, distribute, or create derivative works based on the Service without prior written consent.</p>
 
     <h3>6. User Data &amp; Responsibility</h3>
-    <p>You retain full ownership of any data you upload to the Service. Since all processing occurs locally in your browser, we never access, collect, or store your data. You are solely responsible for the legality, accuracy, and appropriateness of any data you process using the Service.</p>
+    <p>You retain full ownership of any data you upload to the Service. Since all processing occurs locally in your browser, we never access, collect, or store your uploaded data. We do use Google Analytics to collect anonymous usage data (such as pages visited, browser type, and general location) to improve the Service. For full details, please refer to our Privacy Policy. You are solely responsible for the legality, accuracy, and appropriateness of any data you process using the Service.</p>
 
     <h3>7. No Warranty</h3>
     <p>The Service is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, accuracy, or non-infringement. We do not warrant that the Service will be uninterrupted, error-free, or that any outputs will be accurate or reliable.</p>

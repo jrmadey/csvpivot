@@ -7,13 +7,25 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <title>CSV Pivot™</title>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MGWB1025GD"></script>
+<!-- Google Analytics (consent-gated) -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-MGWB1025GD');
+  function loadGA() {
+    if (document.getElementById('ga-script')) return;
+    var s = document.createElement('script');
+    s.id = 'ga-script';
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-MGWB1025GD';
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-MGWB1025GD');
+  }
+  (function() {
+    var consent = localStorage.getItem('cookie-consent');
+    if (consent === 'accepted') loadGA();
+  })();
 </script>
 <!-- Libraries: PapaParse 5.4.1, Chart.js 4.4.7 — Last checked: 2025-02-16. Periodically check for updates. -->
 <script>/* PapaParse 5.4.1 */
@@ -1138,7 +1150,7 @@ header p {
       <li>Browser type, device type, and screen resolution</li>
       <li>Anonymous usage statistics (e.g., button clicks, feature usage)</li>
     </ul>
-    <p>Google Analytics uses cookies to collect this information. The data collected is aggregated and anonymous&mdash;it does not personally identify you. You can opt out of Google Analytics by installing the <a href="https://tools.google.com/dlpage/gaoptout" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.</p>
+    <p>Google Analytics uses cookies to collect this information. The data collected is aggregated and anonymous&mdash;it does not personally identify you. <strong>Analytics cookies are only loaded after you provide consent via the cookie banner.</strong> You may also opt out at any time by installing the <a href="https://tools.google.com/dlpage/gaoptout" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.</p>
     <p>For more information on how Google processes this data, please review <a href="https://policies.google.com/privacy" style="color:var(--accent);" target="_blank" rel="noopener noreferrer">Google&rsquo;s Privacy Policy</a>.</p>
 
     <h3>Data We Do Not Collect</h3>
@@ -1148,8 +1160,9 @@ header p {
       <li>We do not collect names, email addresses, or other personally identifiable information.</li>
     </ul>
 
-    <h3>Cookies</h3>
+    <h3>Cookies &amp; Consent</h3>
     <p>This site uses cookies solely for the purpose of Google Analytics. These cookies help us analyze site traffic and usage patterns. No cookies are used for advertising, personalization, or tracking across other websites.</p>
+    <p>When you first visit the site, a cookie consent banner will appear. Analytics cookies are <strong>only</strong> loaded if you click &ldquo;Accept.&rdquo; If you click &ldquo;Decline,&rdquo; no analytics cookies will be set. Your consent preference is stored in your browser&rsquo;s local storage so you are not asked again on future visits. You can reset your preference at any time by clearing your browser&rsquo;s local storage for this site.</p>
 
     <h3>Third-Party Services</h3>
     <p>The only third-party service integrated with this application is Google Analytics for usage analytics. All core application functionality (file uploads, data processing, pivot tables, and visualizations) remains entirely client-side and self-contained. No uploaded data is ever transmitted to any external server.</p>
@@ -1299,6 +1312,34 @@ document.querySelectorAll('.legal-overlay').forEach(function(o){
   o.addEventListener('click',function(e){if(e.target===o)o.hidden=true;});
   o.querySelector('.legal-close').addEventListener('click',function(){o.hidden=true;});
 });
+</script>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10000;background:var(--surface);border-top:1px solid var(--border, rgba(0,0,0,0.1));box-shadow:0 -4px 24px rgba(0,0,0,0.12);padding:16px 24px;font-size:14px;line-height:1.6;color:var(--text);">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <p style="margin:0;flex:1;min-width:240px;">We use cookies for anonymous analytics to help improve this site. No personal data is collected. See our <a href="#" onclick="document.getElementById('privacy-modal').hidden=false;return false" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a> for details.</p>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button onclick="acceptCookies()" style="padding:8px 20px;border-radius:var(--radius);background:var(--accent);color:var(--accent-text);border:none;cursor:pointer;font-size:14px;font-weight:600;">Accept</button>
+      <button onclick="declineCookies()" style="padding:8px 20px;border-radius:var(--radius);background:transparent;color:var(--text-secondary);border:1px solid var(--text-tertiary);cursor:pointer;font-size:14px;font-weight:600;">Decline</button>
+    </div>
+  </div>
+</div>
+<script>
+function acceptCookies() {
+  localStorage.setItem('cookie-consent', 'accepted');
+  document.getElementById('cookie-banner').style.display = 'none';
+  loadGA();
+}
+function declineCookies() {
+  localStorage.setItem('cookie-consent', 'declined');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+(function() {
+  var consent = localStorage.getItem('cookie-consent');
+  if (!consent) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+})();
 </script>
 
 </body>

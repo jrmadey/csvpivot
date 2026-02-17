@@ -411,6 +411,33 @@ header p {
   box-shadow: 0 0 0 3px var(--accent-subtle);
 }
 
+.control-group input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font);
+  min-width: 150px;
+  transition: border-color var(--transition);
+}
+
+.control-group input[type="text"]:hover {
+  border-color: var(--border-hover);
+}
+
+.control-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+.control-group input[type="text"]::placeholder {
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
 /* ── Buttons ───────────────────────────────────────────────── */
 .btn {
   padding: 9px 20px;
@@ -647,6 +674,28 @@ header p {
             <option value="pct">% Percent</option>
           </select>
         </div>
+        <div class="control-group">
+          <label>Chart Color</label>
+          <select id="chart-color">
+            <option value="#3b6cef">Blue</option>
+            <option value="#e74c3c">Red</option>
+            <option value="#2ecc71">Green</option>
+            <option value="#f1c40f">Yellow</option>
+            <option value="#9b59b6">Purple</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Chart Title</label>
+          <input type="text" id="chart-title" maxlength="250" placeholder="e.g., Sales by Region">
+        </div>
+        <div class="control-group">
+          <label>X-Axis Title</label>
+          <input type="text" id="chart-x-title" maxlength="250" placeholder="e.g., Region">
+        </div>
+        <div class="control-group">
+          <label>Y-Axis Title</label>
+          <input type="text" id="chart-y-title" maxlength="250" placeholder="e.g., Total Sales">
+        </div>
         <button class="btn btn-primary" id="chart-run">Generate Chart</button>
       </div>
       <div class="chart-container" id="chart-container" style="display:none;">
@@ -704,6 +753,10 @@ header p {
   const chartY = document.getElementById('chart-y');
   const chartAgg = document.getElementById('chart-agg');
   const chartUnits = document.getElementById('chart-units');
+  const chartColor = document.getElementById('chart-color');
+  const chartTitleInput = document.getElementById('chart-title');
+  const chartXTitle = document.getElementById('chart-x-title');
+  const chartYTitle = document.getElementById('chart-y-title');
   const chartRun = document.getElementById('chart-run');
   const chartContainer = document.getElementById('chart-container');
   const chartEmpty = document.getElementById('chart-empty');
@@ -993,6 +1046,10 @@ header p {
     const yField = chartY.value;
     const aggMethod = chartAgg.value;
     const units = chartUnits.value;
+    const selectedColor = chartColor.value;
+    const userChartTitle = chartTitleInput.value.trim();
+    const userXTitle = chartXTitle.value.trim();
+    const userYTitle = chartYTitle.value.trim();
 
     if (!xField || !yField) return;
 
@@ -1021,6 +1078,16 @@ header p {
     const aggLabel = aggMethod.charAt(0).toUpperCase() + aggMethod.slice(1);
     const datasetLabel = `${aggLabel} of ${yField}`;
 
+    // Build pie chart color palette based on selected color family
+    const piePalettes = {
+      '#3b6cef': ['#3b6cef','#6b93f5','#1e4fd0','#9bb8fa','#0d3099','#a8c4ff','#2958c4','#5078d8','#7ea6f7','#c0d5fc','#4670cc','#83a3e8','#1a3d9e','#5b85e0','#9fc0ff'],
+      '#e74c3c': ['#e74c3c','#f07c70','#c0392b','#f5a39a','#a93226','#f8c4bf','#d64937','#ec6759','#f29e94','#fad5d0','#cc4133','#e8756a','#b5312a','#ef8a7f','#f6b5ad'],
+      '#2ecc71': ['#2ecc71','#5dd99a','#27ae60','#8be6b8','#1e8449','#b4f0d1','#25a25a','#4ad48e','#7ee0af','#c5f4de','#229e54','#69d8a0','#1b7a43','#55d194','#a0ecc5'],
+      '#f1c40f': ['#f1c40f','#f5d44a','#d4ac0d','#f8e27e','#b7950b','#faeeb0','#c9a30e','#f3ce2f','#f6dc66','#fbf1c8','#bfa00c','#f4d650','#aa8a0a','#f2ca1e','#f9e898'],
+      '#9b59b6': ['#9b59b6','#b57ccf','#8e44ad','#cda0e0','#7d3c98','#dec3ed','#884aab','#a567c2','#bf90d6','#e8d5f2','#8240a0','#ae6ec6','#6e3590','#a05dbd','#d2b0e5']
+    };
+    const selectedPiePalette = piePalettes[selectedColor] || piePalettes['#3b6cef'];
+
     const config = {
       type,
       data: {
@@ -1029,12 +1096,12 @@ header p {
           label: datasetLabel,
           data: values,
           backgroundColor: type === 'pie'
-            ? labels.map((_, i) => palette[i % palette.length])
-            : palette[0],
-          borderColor: type === 'line' ? palette[0] : 'transparent',
+            ? labels.map((_, i) => selectedPiePalette[i % selectedPiePalette.length])
+            : selectedColor,
+          borderColor: type === 'line' ? selectedColor : 'transparent',
           borderWidth: type === 'line' ? 2.5 : 0,
           borderRadius: type === 'bar' ? 5 : 0,
-          pointBackgroundColor: palette[0],
+          pointBackgroundColor: selectedColor,
           pointRadius: type === 'line' ? 4 : 0,
           tension: 0.3,
           fill: type === 'line',
@@ -1045,6 +1112,13 @@ header p {
         maintainAspectRatio: true,
         animation: { duration: 600, easing: 'easeOutQuart' },
         plugins: {
+          title: {
+            display: !!userChartTitle,
+            text: userChartTitle,
+            color: textColor,
+            font: { size: 16, weight: 'bold' },
+            padding: { bottom: 16 }
+          },
           legend: {
             display: type === 'pie',
             labels: { color: textColor, font: { size: 12 }, padding: 16, usePointStyle: true }
@@ -1067,7 +1141,13 @@ header p {
           x: {
             grid: { display: false },
             ticks: { color: textColor, font: { size: 11 } },
-            border: { color: gridColor }
+            border: { color: gridColor },
+            title: {
+              display: !!userXTitle,
+              text: userXTitle,
+              color: textColor,
+              font: { size: 12 }
+            }
           },
           y: {
             grid: { color: gridColor },
@@ -1077,7 +1157,7 @@ header p {
               callback: function(value) { return formatNum(value, units); }
             },
             border: { display: false },
-            title: { display: true, text: datasetLabel, color: textColor, font: { size: 12 } }
+            title: { display: true, text: userYTitle || datasetLabel, color: textColor, font: { size: 12 } }
           }
         }
       }

@@ -456,6 +456,58 @@ header p {
   font-size: 12px;
 }
 
+.title-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.title-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.title-options input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.title-options select {
+  padding: 4px 26px 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 11px;
+  font-family: var(--font);
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 12px;
+  min-width: 0;
+  transition: border-color var(--transition);
+}
+
+.title-options select:hover {
+  border-color: var(--border-hover);
+}
+
+.title-options select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
 /* ── Buttons ───────────────────────────────────────────────── */
 .btn {
   padding: 9px 20px;
@@ -705,14 +757,38 @@ header p {
         <div class="control-group">
           <label>Chart Title</label>
           <input type="text" id="chart-title" maxlength="250" placeholder="e.g., Sales by Region">
+          <div class="title-options">
+            <label><input type="checkbox" id="chart-title-bold" checked> Bold</label>
+            <select id="chart-title-size">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
         </div>
         <div class="control-group">
           <label>X-Axis Title</label>
           <input type="text" id="chart-x-title" maxlength="250" placeholder="e.g., Region">
+          <div class="title-options">
+            <label><input type="checkbox" id="chart-x-title-bold"> Bold</label>
+            <select id="chart-x-title-size">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
         </div>
         <div class="control-group">
           <label>Y-Axis Title</label>
           <input type="text" id="chart-y-title" maxlength="250" placeholder="e.g., Total Sales">
+          <div class="title-options">
+            <label><input type="checkbox" id="chart-y-title-bold"> Bold</label>
+            <select id="chart-y-title-size">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
         </div>
         <button class="btn btn-primary" id="chart-run">Generate Chart</button>
       </div>
@@ -773,8 +849,14 @@ header p {
   const chartUnits = document.getElementById('chart-units');
   const chartColor = document.getElementById('chart-color');
   const chartTitleInput = document.getElementById('chart-title');
+  const chartTitleBold = document.getElementById('chart-title-bold');
+  const chartTitleSize = document.getElementById('chart-title-size');
   const chartXTitle = document.getElementById('chart-x-title');
+  const chartXTitleBold = document.getElementById('chart-x-title-bold');
+  const chartXTitleSize = document.getElementById('chart-x-title-size');
   const chartYTitle = document.getElementById('chart-y-title');
+  const chartYTitleBold = document.getElementById('chart-y-title-bold');
+  const chartYTitleSize = document.getElementById('chart-y-title-size');
   const chartRun = document.getElementById('chart-run');
   const chartContainer = document.getElementById('chart-container');
   const chartEmpty = document.getElementById('chart-empty');
@@ -1069,6 +1151,15 @@ header p {
     const userXTitle = chartXTitle.value.trim();
     const userYTitle = chartYTitle.value.trim();
 
+    const chartTitleSizeMap = { small: 16, medium: 20, large: 24 };
+    const axisTitleSizeMap = { small: 12, medium: 15, large: 18 };
+    const chartTitleFontSize = chartTitleSizeMap[chartTitleSize.value] || 16;
+    const chartTitleFontWeight = chartTitleBold.checked ? 'bold' : 'normal';
+    const xTitleFontSize = axisTitleSizeMap[chartXTitleSize.value] || 12;
+    const xTitleFontWeight = chartXTitleBold.checked ? 'bold' : 'normal';
+    const yTitleFontSize = axisTitleSizeMap[chartYTitleSize.value] || 12;
+    const yTitleFontWeight = chartYTitleBold.checked ? 'bold' : 'normal';
+
     if (!xField || !yField) return;
 
     // Aggregate data
@@ -1134,7 +1225,7 @@ header p {
             display: !!userChartTitle,
             text: userChartTitle,
             color: textColor,
-            font: { size: 16, weight: 'bold' },
+            font: { size: chartTitleFontSize, weight: chartTitleFontWeight },
             padding: { bottom: 16 }
           },
           legend: {
@@ -1164,7 +1255,8 @@ header p {
               display: !!userXTitle,
               text: userXTitle,
               color: textColor,
-              font: { size: 12 }
+              font: { size: xTitleFontSize, weight: xTitleFontWeight },
+              padding: { top: 10 }
             }
           },
           y: {
@@ -1175,7 +1267,7 @@ header p {
               callback: function(value) { return formatNum(value, units); }
             },
             border: { display: false },
-            title: { display: true, text: userYTitle || datasetLabel, color: textColor, font: { size: 12 } }
+            title: { display: true, text: userYTitle || datasetLabel, color: textColor, font: { size: yTitleFontSize, weight: yTitleFontWeight }, padding: { bottom: 10 } }
           }
         }
       }
